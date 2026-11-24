@@ -1,0 +1,99 @@
+/* viewport.css — Viewport, gizmo toolbar, play controls, joystick, touch controls, FPS badge */
+#viewport-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block; touch-action: none; outline: none;
+}
+#pixi-overlay {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 5; display: block;
+}
+#viewport-error {
+  display: none; position: absolute; inset: 0; z-index: 20;
+  align-items: center; justify-content: center; text-align: center;
+  background: rgba(30, 30, 30, .92); color: var(--text-bright); padding: 20px;
+}
+#viewport-error.show { display: flex; }
+#viewport-error .err-box { max-width: 480px; }
+#viewport-error h2 { color: var(--accent-danger); margin-bottom: 10px; }
+#viewport-error p { color: var(--text); line-height: 1.5; margin-bottom: 8px; }
+
+/* ===== Toolbar trên viewport ===== */
+#viewport-toolbar {
+  position: absolute; top: 8px; left: 8px; right: 8px; z-index: 10;
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap; pointer-events: none;
+}
+#viewport-toolbar .tool-group {
+  display: flex; gap: 2px; background: rgba(37, 37, 38, .9);
+  border: 1px solid var(--panel-border); border-radius: var(--radius-lg); padding: 2px;
+  pointer-events: auto;
+}
+#viewport-toolbar .tool-group .spacer { flex: 1; }
+#viewport-toolbar button {
+  min-width: 36px; min-height: 36px; padding: 4px 8px; border-radius: var(--radius);
+  color: var(--text); font-size: 14px;
+}
+#viewport-toolbar button:hover { background: var(--hover); color: var(--text-bright); }
+#viewport-toolbar button.active { background: var(--selection-2); color: #fff; }
+#viewport-toolbar select {
+  background: var(--input-bg); color: var(--text);
+  min-height: 36px; border: 1px solid var(--input-border);
+}
+
+/* ===== Play controls ===== */
+#play-controls {
+  position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 11;
+  display: flex; gap: 4px; background: rgba(37, 37, 38, .9);
+  border: 1px solid var(--panel-border); border-radius: var(--radius-lg); padding: 3px;
+}
+#play-controls button {
+  min-width: 44px; min-height: 36px; padding: 4px 10px; border-radius: var(--radius);
+  color: var(--text); font-weight: 600;
+}
+#play-controls button:hover { background: var(--hover); color: var(--text-bright); }
+#play-controls #btn-play { color: var(--accent-green); }
+#play-controls #btn-play.playing { background: var(--accent-green); color: #fff; }
+#play-controls #btn-stop { color: var(--accent-danger); }
+
+/* ===== FPS badge ===== */
+#fps-badge {
+  position: absolute; top: 56px; left: 8px; z-index: 10;
+  background: rgba(0, 0, 0, .55); color: #fff; font-size: var(--font-size-sm);
+  font-family: var(--font-mono); padding: 4px 8px; border-radius: var(--radius);
+  pointer-events: none; white-space: nowrap;
+}
+#viewport-hint {
+  position: absolute; bottom: 8px; left: 8px; z-index: 10;
+  background: rgba(0, 0, 0, .45); color: #ddd; font-size: var(--font-size-sm);
+  padding: 4px 8px; border-radius: var(--radius); pointer-events: none;
+}
+
+/* ===== Touch controls / joystick ===== */
+#touch-controls {
+  display: none; position: absolute; left: 0; right: 0; bottom: 0; z-index: 12;
+  justify-content: space-between; align-items: flex-end; padding: 12px; pointer-events: none;
+}
+#touch-controls.show { display: flex; }
+#joystick {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(255, 255, 255, .12); border: 2px solid rgba(255, 255, 255, .35);
+  position: relative; pointer-events: auto; touch-action: none;
+}
+#joystick-knob {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(255, 255, 255, .45); border: 2px solid rgba(255, 255, 255, .6);
+  position: absolute; left: 34px; top: 34px;
+}
+#touch-buttons { display: flex; flex-direction: column; gap: 10px; pointer-events: auto; }
+#touch-buttons button {
+  min-width: 56px; min-height: 56px; border-radius: 50%;
+  background: rgba(37, 37, 38, .85); border: 1px solid var(--panel-border);
+  color: var(--text-bright); font-weight: 600;
+}
+#touch-buttons button:active { background: var(--accent); }
+
+@media (max-width: 900px) {
+  #viewport-toolbar button { min-width: 44px; min-height: 44px; }
+  #play-controls { top: 56px; }
+  #fps-badge { top: 104px; }
+  #viewport-hint { display: none; }
+}

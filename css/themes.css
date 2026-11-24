@@ -1,0 +1,67 @@
+/* themes.css — Biến CSS dark theme (mặc định) + class .theme-light dự phòng */
+:root {
+  --bg: #1e1e1e;
+  --bg-2: #252526;
+  --bg-3: #2d2d30;
+  --bg-4: #333337;
+  --panel-bg: #252526;
+  --panel-border: #3e3e42;
+  --panel-header-bg: #2d2d30;
+  --text: #cccccc;
+  --text-bright: #ffffff;
+  --text-dim: #858585;
+  --text-muted: #969696;
+  --accent: #007acc;
+  --accent-hover: #0098ff;
+  --accent-2: #4ec9b0;
+  --accent-warn: #d7ba7d;
+  --accent-danger: #f48771;
+  --accent-green: #89d185;
+  --accent-yellow: #ffcc00;
+  --accent-orange: #ce9178;
+  --accent-purple: #c586c0;
+  --accent-blue: #569cd6;
+  --selection: #264f78;
+  --selection-2: #094771;
+  --hover: #2a2d2e;
+  --input-bg: #3c3c3c;
+  --input-border: #555555;
+  --input-focus: #007acc;
+  --scrollbar: #424242;
+  --scrollbar-hover: #4f4f4f;
+  --tree-indent: 16px;
+  --radius: 4px;
+  --radius-lg: 6px;
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: Consolas, "Courier New", monospace;
+  --font-size: 13px;
+  --font-size-sm: 12px;
+  --topbar-h: 34px;
+  --menubar-h: 30px;
+  --tabbar-h: 36px;
+  --statusbar-h: 24px;
+  --toolbar-h: 38px;
+}
+
+.theme-light {
+  --bg: #f3f3f3;
+  --bg-2: #ffffff;
+  --bg-3: #ececec;
+  --bg-4: #e5e5e5;
+  --panel-bg: #ffffff;
+  --panel-border: #d4d4d4;
+  --panel-header-bg: #ececec;
+  --text: #333333;
+  --text-bright: #000000;
+  --text-dim: #777777;
+  --text-muted: #666666;
+  --accent: #007acc;
+  --accent-hover: #0062a3;
+  --selection: #add6ff;
+  --selection-2: #cfe8ff;
+  --hover: #e8e8e8;
+  --input-bg: #ffffff;
+  --input-border: #cccccc;
+  --scrollbar: #c1c1c1;
+  --scrollbar-hover: #a8a8a8;
+}

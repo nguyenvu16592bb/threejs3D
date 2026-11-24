@@ -1,0 +1,156 @@
+/* editor.css — Dark theme tổng, layout chính của Editor */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: var(--font);
+  font-size: var(--font-size);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+button { font-family: inherit; font-size: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+input, select, textarea { font-family: inherit; font-size: inherit; color: var(--text); background: var(--input-bg); border: 1px solid var(--input-border); border-radius: var(--radius); padding: 4px 6px; }
+input:focus, select:focus, textarea:focus { outline: 1px solid var(--input-focus); border-color: var(--input-focus); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ===== Khung tổng: grid dọc ===== */
+#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; width: 100%; }
+
+/* ===== Top bar ===== */
+#top-bar {
+  height: var(--topbar-h); flex: 0 0 var(--topbar-h);
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-3); border-bottom: 1px solid var(--panel-border);
+  padding: 0 10px; user-select: none;
+}
+#app-title { font-weight: 600; color: var(--text-bright); font-size: 14px; white-space: nowrap; }
+#app-title span { color: var(--accent-2); }
+#project-name { color: var(--text-dim); font-size: var(--font-size-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#top-bar .spacer { flex: 1; }
+.top-btn {
+  min-height: 28px; min-width: 28px; padding: 4px 10px;
+  border-radius: var(--radius); color: var(--text);
+}
+.top-btn:hover { background: var(--hover); color: var(--text-bright); }
+.top-btn.primary { background: var(--accent); color: #fff; }
+.top-btn.primary:hover { background: var(--accent-hover); }
+
+/* ===== Menu bar ===== */
+#menu-bar {
+  height: var(--menubar-h); flex: 0 0 var(--menubar-h);
+  display: flex; align-items: stretch;
+  background: var(--bg-2); border-bottom: 1px solid var(--panel-border);
+  padding: 0 4px; overflow-x: auto; user-select: none;
+}
+.menu { position: relative; display: flex; align-items: center; }
+.menu > button {
+  padding: 4px 10px; min-height: 28px; border-radius: var(--radius);
+  color: var(--text); white-space: nowrap;
+}
+.menu > button:hover, .menu.open > button { background: var(--hover); color: var(--text-bright); }
+.menu-dropdown {
+  display: none; position: absolute; top: 100%; left: 0; z-index: 200;
+  min-width: 220px; background: var(--bg-3); border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg); box-shadow: 0 8px 24px rgba(0,0,0,.5); padding: 4px;
+}
+.menu.open .menu-dropdown { display: block; }
+.menu-dropdown button {
+  display: flex; width: 100%; text-align: left; padding: 7px 10px;
+  border-radius: var(--radius); color: var(--text); min-height: 32px; align-items: center; gap: 8px;
+}
+.menu-dropdown button:hover { background: var(--selection); color: var(--text-bright); }
+.menu-dropdown button:disabled { color: var(--text-dim); cursor: default; background: none; }
+.menu-dropdown hr { border: none; border-top: 1px solid var(--panel-border); margin: 4px 0; }
+.menu-dropdown .shortcut { margin-left: auto; color: var(--text-dim); font-size: var(--font-size-sm); }
+
+/* ===== Module tabs ===== */
+#module-tabs {
+  height: var(--tabbar-h); flex: 0 0 var(--tabbar-h);
+  display: flex; align-items: stretch; gap: 2px;
+  background: var(--bg); border-bottom: 1px solid var(--panel-border);
+  padding: 0 6px; overflow-x: auto; user-select: none;
+}
+.module-tab {
+  padding: 6px 14px; min-height: 36px; border-bottom: 2px solid transparent;
+  color: var(--text-dim); white-space: nowrap; border-radius: var(--radius) var(--radius) 0 0;
+}
+.module-tab:hover { color: var(--text-bright); background: var(--hover); }
+.module-tab.active { color: var(--text-bright); border-bottom-color: var(--accent); background: var(--bg-2); }
+
+/* ===== Layout giữa: 3 cột ===== */
+#main-layout { flex: 1; display: flex; min-height: 0; }
+#hierarchy-panel, #inspector-panel {
+  flex: 0 0 260px; width: 260px; min-height: 0;
+  background: var(--panel-bg); display: flex; flex-direction: column; overflow: hidden;
+}
+#hierarchy-panel { border-right: 1px solid var(--panel-border); }
+#inspector-panel { border-left: 1px solid var(--panel-border); }
+#center-column { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+#viewport-wrap { flex: 1; position: relative; min-height: 0; background: #87b5d6; overflow: hidden; }
+
+/* ===== Bottom dock ===== */
+#bottom-dock {
+  flex: 0 0 220px; height: 220px; display: flex; flex-direction: column;
+  background: var(--panel-bg); border-top: 1px solid var(--panel-border); min-height: 0;
+}
+#bottom-dock .dock-tabs { display: flex; gap: 2px; padding: 2px 6px 0; border-bottom: 1px solid var(--panel-border); }
+#bottom-dock .dock-tabs button { padding: 6px 12px; min-height: 32px; color: var(--text-dim); border-bottom: 2px solid transparent; }
+#bottom-dock .dock-tabs button.active { color: var(--text-bright); border-bottom-color: var(--accent); }
+#bottom-panels { flex: 1; display: flex; min-height: 0; position: relative; }
+#bottom-panels > section { flex: 1; min-width: 0; overflow: auto; display: none; }
+#bottom-panels > section.active { display: block; }
+
+/* Các panel module (do nhóm khác điền nội dung) */
+.module-panel { display: none; flex: 1; min-height: 0; overflow: auto; background: var(--panel-bg); }
+.module-panel.active { display: flex; flex-direction: column; }
+.panel-empty { color: var(--text-dim); padding: 16px; text-align: center; }
+
+/* ===== Status bar ===== */
+#status-bar {
+  height: var(--statusbar-h); flex: 0 0 var(--statusbar-h);
+  display: flex; align-items: center; gap: 14px;
+  background: var(--accent); color: #fff; font-size: var(--font-size-sm);
+  padding: 0 10px; overflow-x: auto; white-space: nowrap; user-select: none;
+}
+#status-bar span b { font-weight: 600; }
+#status-bar .spacer { flex: 1; }
+#status-message { overflow: hidden; text-overflow: ellipsis; }
+
+/* ===== Nút chung ===== */
+.btn {
+  min-height: 32px; padding: 5px 12px; border-radius: var(--radius);
+  background: var(--bg-4); border: 1px solid var(--input-border); color: var(--text);
+}
+.btn:hover { background: var(--hover); color: var(--text-bright); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.danger { background: #a1260d; border-color: #a1260d; color: #fff; }
+.icon-btn { min-width: 32px; min-height: 32px; padding: 4px 8px; border-radius: var(--radius); }
+.icon-btn:hover { background: var(--hover); }
+.icon-btn.active { background: var(--selection-2); color: #fff; }
+
+/* ===== Responsive: phone-first ===== */
+@media (max-width: 900px) {
+  #hierarchy-panel, #inspector-panel {
+    position: fixed; top: calc(var(--topbar-h) + var(--menubar-h) + var(--tabbar-h));
+    bottom: var(--statusbar-h); z-index: 150; width: min(300px, 84vw);
+    transform: translateX(-105%); transition: transform .2s ease;
+    box-shadow: 0 0 24px rgba(0,0,0,.5);
+  }
+  #hierarchy-panel { left: 0; }
+  #inspector-panel { right: 0; transform: translateX(105%); }
+  #hierarchy-panel.open, #inspector-panel.open { transform: translateX(0); }
+  #bottom-dock { flex-basis: 180px; height: 180px; }
+  .module-tab { padding: 6px 10px; }
+  #app-title { font-size: 13px; }
+  button, .menu > button, .module-tab, .menu-dropdown button { min-height: 44px; }
+  .menu-dropdown button { min-height: 44px; }
+  #status-bar { gap: 10px; }
+}
+@media (max-width: 560px) {
+  #project-name { display: none; }
+  #top-bar .top-btn span.label { display: none; }
+  #bottom-dock { flex-basis: 160px; height: 160px; }
+}

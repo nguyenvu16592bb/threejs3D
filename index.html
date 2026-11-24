@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PixiJS 3D Game Engine Editor</title>
+<link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/editor.css">
+<link rel="stylesheet" href="css/panels.css">
+<link rel="stylesheet" href="css/viewport.css">
+<style>
+  /* Panel module thay thế layout chính khi chọn tab (trừ tab 3D / 2D). */
+  #bottom-dock.dock-expanded { flex-basis: 340px; height: 340px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== Top bar ===== -->
+  <header id="top-bar">
+    <button class="top-btn" id="btn-toggle-hierarchy" title="Hiện/ẩn Hierarchy">☰</button>
+    <div id="app-title">PixiJS <span>3D</span> Game Engine Editor</div>
+    <div id="project-name">Untitled Project</div>
+    <div class="spacer"></div>
+    <button class="top-btn" id="btn-save-top" title="Lưu project (Ctrl+S)">💾 <span class="label">Lưu</span></button>
+    <button class="top-btn primary" id="btn-play-top" title="Chạy game">▶ <span class="label">Play</span></button>
+    <button class="top-btn" id="btn-toggle-inspector" title="Hiện/ẩn Inspector">🪟</button>
+  </header>
+
+  <!-- ===== Menu bar ===== -->
+  <nav id="menu-bar" aria-label="Menu chính">
+    <div class="menu" data-menu="file"><button>File</button>
+      <div class="menu-dropdown">
+        <button data-action="new-project">Project mới <span class="shortcut">Ctrl+N</span></button>
+        <button data-action="save-project">Lưu project <span class="shortcut">Ctrl+S</span></button>
+        <button data-action="download-project">Tải project xuống (.json)</button>
+        <button data-action="upload-project">Mở project (.json)…</button>
+        <hr>
+        <button data-action="load-local">Mở project đã lưu trong trình duyệt</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="edit"><button>Edit</button>
+      <div class="menu-dropdown">
+        <button data-action="undo">Hoàn tác <span class="shortcut">Ctrl+Z</span></button>
+        <button data-action="redo">Làm lại <span class="shortcut">Ctrl+Y</span></button>
+        <hr>
+        <button data-action="duplicate">Nhân đôi object đã chọn <span class="shortcut">Ctrl+D</span></button>
+        <button data-action="delete">Xóa object đã chọn <span class="shortcut">Del</span></button>
+      </div>
+    </div>
+    <div class="menu" data-menu="view"><button>View</button>
+      <div class="menu-dropdown">
+        <button data-action="toggle-grid">Bật/tắt lưới sàn</button>
+        <button data-action="toggle-hierarchy">Hiện/ẩn Hierarchy</button>
+        <button data-action="toggle-inspector">Hiện/ẩn Inspector</button>
+        <button data-action="focus-selected">Focus object đã chọn <span class="shortcut">F</span></button>
+        <hr>
+        <button data-action="camera-orbit">Camera: Orbit</button>
+        <button data-action="camera-top">Camera: Top</button>
+        <button data-action="camera-front">Camera: Front</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="tools"><button>Tools</button>
+      <div class="menu-dropdown">
+        <button data-action="tool-select">Công cụ: Chọn (Q)</button>
+        <button data-action="tool-move">Công cụ: Di chuyển (W)</button>
+        <button data-action="tool-rotate">Công cụ: Xoay (E)</button>
+        <button data-action="tool-scale">Công cụ: Tỉ lệ (R)</button>
+        <hr>
+        <button data-action="shadows-on">Bật bóng đổ</button>
+        <button data-action="shadows-off">Tắt bóng đổ</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="gameobject"><button>GameObject</button>
+      <div class="menu-dropdown">
+        <button data-action="add-box">Tạo Box</button>
+        <button data-action="add-sphere">Tạo Sphere</button>
+        <button data-action="add-cylinder">Tạo Cylinder</button>
+        <button data-action="add-tree">Tạo Cây thông</button>
+        <button data-action="add-light">Thêm đèn Point</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="scene"><button>Scene</button>
+      <div class="menu-dropdown">
+        <button data-action="default-scene">Tải scene đảo nổi mặc định</button>
+        <button data-action="clear-scene">Xóa hết scene</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="assets"><button>Assets</button>
+      <div class="menu-dropdown">
+        <button data-action="import-model">Import model 3D (.glb/.fbx)…</button>
+        <button data-action="open-asset-browser">Mở Asset Browser</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="animation"><button>Animation</button>
+      <div class="menu-dropdown">
+        <button data-action="open-animation">Mở Animation Editor</button>
+        <button data-action="open-timeline">Mở Timeline</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="window"><button>Window</button>
+      <div class="menu-dropdown">
+        <button data-action="show-console">Hiện Console</button>
+        <button data-action="show-timeline">Hiện Timeline</button>
+        <button data-action="show-assets">Hiện Asset Browser</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="help"><button>Help</button>
+      <div class="menu-dropdown">
+        <button data-action="about">Giới thiệu Editor</button>
+        <button data-action="shortcuts">Phím tắt</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Module tabs ===== -->
+  <div id="module-tabs" role="tablist" aria-label="Module">
+    <button class="module-tab active" data-tab="3d" role="tab">🎮 3D Scenes</button>
+    <button class="module-tab" data-tab="2d" role="tab">🧩 2D &amp; Tilemaps</button>
+    <button class="module-tab" data-tab="animation" role="tab">🎬 Animation</button>
+    <button class="module-tab" data-tab="code" role="tab">💻 Code Editor</button>
+    <button class="module-tab" data-tab="ui" role="tab">🖼️ UI System</button>
+    <button class="module-tab" data-tab="ai" role="tab">🤖 AI Assistant</button>
+  </div>
+
+  <!-- ===== Layout chính: Hierarchy | Viewport | Inspector ===== -->
+  <div id="main-layout">
+    <aside id="hierarchy-panel" aria-label="Hierarchy">
+      <div class="panel-header">Hierarchy <span class="spacer"></span><button class="panel-close" id="btn-close-hierarchy" title="Đóng">✕</button></div>
+      <div class="panel-body">
+        <ul id="hierarchy-tree"><li class="tree-empty">Chưa có object — đang tải scene…</li></ul>
+      </div>
+    </aside>
+
+    <div id="center-column">
+      <div id="viewport-wrap">
+        <canvas id="viewport-canvas" tabindex="0"></canvas>
+        <canvas id="pixi-overlay"></canvas>
+
+        <div id="viewport-toolbar">
+          <div class="tool-group">
+            <button data-tool="select" class="active" title="Chọn (Q)">➤</button>
+            <button data-tool="move" title="Di chuyển (W)">✥</button>
+            <button data-tool="rotate" title="Xoay (E)">⟳</button>
+            <button data-tool="scale" title="Tỉ lệ (R)">⤢</button>
+          </div>
+          <div class="tool-group">
+            <select id="camera-mode" title="Chế độ camera">
+              <option value="orbit">Orbit</option>
+              <option value="free">Free (WASD)</option>
+              <option value="top">Top</option>
+              <option value="front">Front</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+            </select>
+            <select id="shading-mode" title="Chế độ hiển thị">
+              <option value="shaded">Shaded</option>
+              <option value="wireframe">Wireframe</option>
+              <option value="textured">Textured</option>
+            </select>
+            <button id="btn-grid" class="active" title="Bật/tắt lưới">▦ Lưới</button>
+            <button id="btn-focus" title="Focus object đã chọn (F)">◎ Focus</button>
+            <button id="btn-zoom-in" title="Phóng to">＋</button>
+            <button id="btn-zoom-out" title="Thu nhỏ">－</button>
+          </div>
+        </div>
+
+        <div id="play-controls">
+          <button id="btn-play" title="Chạy game">▶ Play</button>
+          <button id="btn-pause" title="Tạm dừng">⏸ Pause</button>
+          <button id="btn-stop" title="Dừng">⏹ Stop</button>
+        </div>
+
+        <div id="fps-badge">FPS: --</div>
+        <div id="viewport-hint">Chuột trái: xoay • Lăn chuột: zoom • Chuột phải: pan • Chạm 1 ngón: xoay • Chụm 2 ngón: zoom</div>
+
+        <div id="touch-controls">
+          <div id="joystick"><div id="joystick-knob"></div></div>
+          <div id="touch-buttons">
+            <button id="btn-jump" type="button">Nhảy</button>
+            <button id="btn-run" type="button">Chạy</button>
+          </div>
+        </div>
+
+        <div id="viewport-error">
+          <div class="err-box">
+            <h2>⚠️ Không khởi động được Engine</h2>
+            <p>Không tải được Babylon.js từ CDN. Kiểm tra kết nối mạng rồi tải lại trang.</p>
+            <p>CDN cần dùng: cdn.jsdelivr.net/npm/babylonjs@7.0.0/babylon.js</p>
+            <button class="btn primary" onclick="location.reload()">Tải lại trang</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside id="inspector-panel" aria-label="Inspector">
+      <div class="panel-header">Inspector <span class="spacer"></span><button class="panel-close" id="btn-close-inspector" title="Đóng">✕</button></div>
+      <div class="panel-body" id="inspector-body">
+        <div class="inspector-empty">Chưa chọn object nào.<br>Chọn một object trong Hierarchy hoặc trong viewport.</div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ===== Bottom dock ===== -->
+  <div id="bottom-dock">
+    <div class="dock-tabs">
+      <button data-dock="asset-browser" class="active">Assets</button>
+      <button data-dock="tile-palette">Tile Palette</button>
+      <button data-dock="tool-settings">Tools / Brush</button>
+      <button data-dock="console-panel">Console</button>
+      <button data-dock="timeline-panel">Timeline</button>
+    </div>
+    <div id="bottom-panels">
+      <section id="asset-browser" class="active" aria-label="Asset Browser">
+        <input class="asset-search" id="asset-search" type="search" placeholder="Tìm asset…">
+        <div class="asset-grid" id="asset-grid">
+          <div class="asset-item" data-asset="box"><span class="asset-icon">📦</span><span class="asset-name">Box</span></div>
+          <div class="asset-item" data-asset="sphere"><span class="asset-icon">🔵</span><span class="asset-name">Sphere</span></div>
+          <div class="asset-item" data-asset="tree"><span class="asset-icon">🌲</span><span class="asset-name">Cây thông</span></div>
+          <div class="asset-item" data-asset="house"><span class="asset-icon">🏠</span><span class="asset-name">Nhà</span></div>
+          <div class="asset-item" data-asset="coin"><span class="asset-icon">🪙</span><span class="asset-name">Đồng xu</span></div>
+          <div class="asset-item" data-asset="chest"><span class="asset-icon">🧰</span><span class="asset-name">Rương</span></div>
+        </div>
+      </section>
+      <section id="tile-palette" aria-label="Tile Palette">
+        <div class="tile-grid" id="tile-grid">
+          <div class="tile-item" data-tile="grass" title="Cỏ">🟩</div>
+          <div class="tile-item" data-tile="dirt" title="Đất">🟫</div>
+          <div class="tile-item" data-tile="water" title="Nước">🟦</div>
+          <div class="tile-item" data-tile="stone" title="Đá">⬜</div>
+          <div class="tile-item" data-tile="sand" title="Cát">🟨</div>
+          <div class="tile-item" data-tile="wood" title="Gỗ">🟧</div>
+        </div>
+        <p class="panel-empty">Tile Palette — nhóm 2D/Terrain điền nội dung chi tiết tại đây.</p>
+      </section>
+      <section id="tool-settings" aria-label="Tool settings">
+        <p class="panel-empty">Tools / Brush — chọn công cụ ở toolbar viewport; nhóm Terrain/Editor điền cài đặt brush tại đây.</p>
+      </section>
+      <section id="console-panel" aria-label="Console">
+        <div class="log-line log-info">[Editor] PixiJS 3D Game Engine Editor đã sẵn sàng.</div>
+      </section>
+      <section id="timeline-panel" aria-label="Timeline">
+        <div class="timeline-track"><div class="timeline-playhead"></div><div class="timeline-clip" style="left:5%;width:30%;">Clip mặc định</div></div>
+        <p class="panel-empty">Timeline — nhóm Animation điền nội dung chi tiết tại đây.</p>
+      </section>
+    </div>
+  </div>
+
+  <!-- ===== Panel module (nhóm khác điền nội dung) ===== -->
+  <section id="animation-panel" class="module-panel" aria-label="Animation">
+    <div class="panel-header">Animation Editor</div>
+    <div class="panel-body"><p class="panel-empty">Panel Animation — nhóm Animation điền nội dung (Timeline, AnimationGraph, StateMachine) tại đây.</p></div>
+  </section>
+  <section id="code-panel" class="module-panel" aria-label="Code Editor">
+    <div class="panel-header">Code Editor</div>
+    <div class="panel-body"><p class="panel-empty">Panel Code Editor — nhóm khác điền nội dung tại đây.</p></div>
+  </section>
+  <section id="ui-panel" class="module-panel" aria-label="UI System">
+    <div class="panel-header">UI System</div>
+    <div class="panel-body"><p class="panel-empty">Panel UI System — nhóm UI điền nội dung (UIEditor, WidgetManager) tại đây.</p></div>
+  </section>
+  <section id="ai-panel" class="module-panel" aria-label="AI Assistant">
+    <div class="panel-header">AI Assistant</div>
+    <div class="panel-body"><p class="panel-empty">Panel AI Assistant — nhóm AI điền nội dung (AIAssistant, PromptManager) tại đây.</p></div>
+  </section>
+
+  <!-- ===== Status bar ===== -->
+  <footer id="status-bar">
+    <span>FPS: <b id="stat-fps">--</b></span>
+    <span>Objects: <b id="stat-objects">0</b></span>
+    <span>Draw Calls: <b id="stat-drawcalls">0</b></span>
+    <span>Triangles: <b id="stat-triangles">0</b></span>
+    <span>Vertices: <b id="stat-vertices">0</b></span>
+    <span>Memory: <b id="stat-memory">n/a</b></span>
+    <span class="spacer"></span>
+    <span id="status-message">Sẵn sàng.</span>
+  </footer>
+</div>
+
+<input type="file" id="file-upload-input" accept=".json,application/json" hidden>
+<div id="context-menu" role="menu"></div>
+
+<!-- ===== CDN (đã xác minh 200) ===== -->
+<script src="https://cdn.jsdelivr.net/npm/pixi.js@8.23.0/dist/pixi.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/babylonjs@7.0.0/babylon.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/babylonjs-loaders@7.0.0/babylonjs.loaders.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/babylonjs-gui@7.0.0/babylon.gui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/babylonjs-serializers@7.0.0/babylonjs.serializers.min.js"></script>
+
+<!-- ===== Core ===== -->
+<script src="js/core/EventManager.js"></script>
+<script src="js/core/Engine.js"></script>
+<script src="js/core/SceneManager.js"></script>
+<script src="js/core/SelectionManager.js"></script>
+<script src="js/core/UndoRedoManager.js"></script>
+<script src="js/core/ProjectManager.js"></script>
+
+<!-- ===== Rendering ===== -->
+<script src="js/rendering/PixiRenderer.js"></script>
+<script src="js/rendering/BabylonRenderer.js"></script>
+<script src="js/rendering/CameraController.js"></script>
+<script src="js/rendering/LightingManager.js"></script>
+<script src="js/rendering/MaterialManager.js"></script>
+<script src="js/rendering/ShadowManager.js"></script>
+
+<!-- ===== Editor (nhóm Editor) ===== -->
+<script src="js/editor/SceneHierarchy.js"></script>
+<script src="js/editor/Inspector.js"></script>
+<script src="js/editor/TransformGizmo.js"></script>
+<script src="js/editor/AssetBrowser.js"></script>
+<script src="js/editor/Toolbar.js"></script>
+<script src="js/editor/ContextMenu.js"></script>
+
+<!-- ===== Terrain (nhóm Terrain) ===== -->
+<script src="js/terrain/TerrainEditor.js"></script>
+<script src="js/terrain/TerrainBrush.js"></script>
+<script src="js/terrain/HeightmapEditor.js"></script>
+<script src="js/terrain/TexturePainter.js"></script>
+<script src="js/terrain/FoliagePainter.js"></script>
+<script src="js/terrain/WaterEditor.js"></script>
+
+<!-- ===== Models (nhóm Models) ===== -->
+<script src="js/models/ModelImporter.js"></script>
+<script src="js/models/GLBLoader.js"></script>
+<script src="js/models/ModelViewer.js"></script>
+<script src="js/models/ModelInspector.js"></script>
+<script src="js/models/SkeletonViewer.js"></script>
+
+<!-- ===== Animation (nhóm Animation) ===== -->
+<script src="js/animation/AnimationEditor.js"></script>
+<script src="js/animation/Timeline.js"></script>
+<script src="js/animation/AnimationGraph.js"></script>
+<script src="js/animation/StateMachine.js"></script>
+
+<!-- ===== Effects (nhóm Effects) ===== -->
+<script src="js/effects/ParticleEditor.js"></script>
+<script src="js/effects/VFXManager.js"></script>
+
+<!-- ===== UI (nhóm UI) ===== -->
+<script src="js/ui/UIEditor.js"></script>
+<script src="js/ui/WidgetManager.js"></script>
+<script src="js/ui/CodeEditor.js"></script>
+
+<!-- ===== AI (nhóm AI) ===== -->
+<script src="js/ai/AIAssistant.js"></script>
+<script src="js/ai/PromptManager.js"></script>
+
+<!-- ===== Runtime (nhóm Runtime) ===== -->
+<script src="js/runtime/GameRuntime.js"></script>
+<script src="js/runtime/InputManager.js"></script>
+<script src="js/runtime/PhysicsManager.js"></script>
+<script src="js/runtime/CollisionManager.js"></script>
+
+<!-- ===== Boot: nối tất cả module (phải load CUỐI CÙNG) ===== -->
+<script src="js/core/Boot.js"></script>
+
+<script>
+'use strict';
+/* Khởi động + wiring tối thiểu của shell (menu/tab/play/toolbar).
+   Các panel nội dung chi tiết do nhóm khác điền; file này chỉ chuyển tab/panel. */
+window.addEventListener('DOMContentLoaded', function () {
+  var PE = window.PixiEngine || {};
+  function status(msg) { var el = document.getElementById('status-message'); if (el) { el.textContent = msg; } }
+
+  if (typeof BABYLON === 'undefined') {
+    var err = document.getElementById('viewport-error');
+    if (err) { err.classList.add('show'); }
+    status('Lỗi: không tải được Babylon.js từ CDN — kiểm tra mạng rồi tải lại trang.');
+    return;
+  }
+  if (!PE.Engine || typeof PE.Engine.init !== 'function') {
+    status('Lỗi: Engine.js chưa load.');
+    return;
+  }
+  PE.Engine.init();
+  if (typeof PIXI === 'undefined') { console.warn('[Shell] PIXI chưa load — overlay HUD tắt.'); }
+
+  /* ----- Menu dropdown ----- */
+  document.querySelectorAll('.menu > button').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var menu = btn.parentElement;
+      var wasOpen = menu.classList.contains('open');
+      document.querySelectorAll('.menu.open').forEach(function (m) { m.classList.remove('open'); });
+      if (!wasOpen) { menu.classList.add('open'); }
+    });
+  });
+  document.addEventListener('click', function () {
+    document.querySelectorAll('.menu.open').forEach(function (m) { m.classList.remove('open'); });
+  });
+
+  /* ----- Menu actions (File/Edit/View/Tools/GameObject/Scene/...) ----- */
+  function doAction(action) {
+    var PM = PE.ProjectManager, SM = PE.SceneManager, UR = PE.UndoRedoManager;
+    var sel = PE.SelectionManager ? PE.SelectionManager.getSelected() : null;
+    switch (action) {
+      case 'new-project': if (PM) { PM.newProject(); } break;
+      case 'save-project': if (PM) { PM.saveToLocalStorage(); } break;
+      case 'download-project': if (PM) { PM.downloadJSON(); } break;
+      case 'upload-project': document.getElementById('file-upload-input').click(); break;
+      case 'load-local': if (PM) { PM.loadFromLocalStorage(); } break;
+      case 'undo': if (UR) { UR.undo(); } break;
+      case 'redo': if (UR) { UR.redo(); } break;
+      case 'duplicate': if (sel && SM) { SM.duplicateObject(sel.id); } break;
+      case 'delete': if (sel && SM) { SM.removeObject(sel.id); } break;
+      case 'toggle-grid': { var b = document.getElementById('btn-grid'); if (b) { b.click(); } break; }
+      case 'toggle-hierarchy': document.getElementById('hierarchy-panel').classList.toggle('open'); break;
+      case 'toggle-inspector': document.getElementById('inspector-panel').classList.toggle('open'); break;
+      case 'focus-selected': if (PE.Engine) { PE.Engine.focusSelected(); } break;
+      case 'camera-orbit': case 'camera-top': case 'camera-front': {
+        var m = action.replace('camera-', '');
+        var selCam = document.getElementById('camera-mode'); if (selCam) { selCam.value = m; }
+        if (PE.CameraController) { PE.CameraController.setMode(m); }
+        break;
+      }
+      case 'tool-select': case 'tool-move': case 'tool-rotate': case 'tool-scale': {
+        var tool = action.replace('tool-', '');
+        document.querySelectorAll('#viewport-toolbar [data-tool]').forEach(function (t) {
+          t.classList.toggle('active', t.getAttribute('data-tool') === tool);
+        });
+        status('Công cụ: ' + tool);
+        break;
+      }
+      case 'shadows-on': if (PE.ShadowManager) { PE.ShadowManager.enableShadows(true); status('Đã bật bóng đổ.'); } break;
+      case 'shadows-off': if (PE.ShadowManager) { PE.ShadowManager.enableShadows(false); status('Đã tắt bóng đổ.'); } break;
+      case 'add-box': if (SM) { SM.addObject({ name: 'Box', type: 'box', meshType: 'box', size: { width: 1, height: 1, depth: 1 }, color: '#90CAF9' }); } break;
+      case 'add-sphere': if (SM) { SM.addObject({ name: 'Sphere', type: 'sphere', meshType: 'sphere', size: { diameter: 1 }, color: '#CE93D8' }); } break;
+      case 'add-cylinder': if (SM) { SM.addObject({ name: 'Cylinder', type: 'cylinder', meshType: 'cylinder', size: { height: 1.5, diameter: 1 }, color: '#FFCC80' }); } break;
+      case 'add-tree': if (SM) { SM.buildDefaultScene ? null : null; status('Thêm cây: dùng Asset Browser (nhóm Editor sẽ nối).'); } break;
+      case 'add-light': if (PE.LightingManager) { PE.LightingManager.addLight('point', { intensity: 1, color: '#FFF59D', position: { x: 0, y: 5, z: 0 } }); } break;
+      case 'default-scene': if (SM) { SM.buildDefaultScene(); status('Đã tải scene đảo nổi mặc định.'); } break;
+      case 'clear-scene': if (SM && confirm('Xóa hết object trong scene?')) { SM.clearScene(); } break;
+      case 'open-animation': switchTab('animation'); break;
+      case 'open-timeline': switchTab('animation'); showDock('timeline-panel'); break;
+      case 'show-console': showDock('console-panel'); break;
+      case 'show-timeline': showDock('timeline-panel'); break;
+      case 'show-assets': showDock('asset-browser'); break;
+      case 'about': alert('PixiJS 3D Game Engine Editor\nBabylon.js 7 + PixiJS 8\nScene mặc định: đảo nổi.'); break;
+      case 'shortcuts': alert('Phím tắt:\nCtrl+S lưu • Ctrl+Z hoàn tác • Ctrl+Y làm lại\nCtrl+D nhân đôi • Del xóa • F focus\nWASD di chuyển camera ở chế độ Free'); break;
+      default: status('Chức năng "' + action + '" do nhóm khác phụ trách.');
+    }
+  }
+  document.querySelectorAll('.menu-dropdown button[data-action]').forEach(function (btn) {
+    btn.addEventListener('click', function () { doAction(btn.getAttribute('data-action')); });
+  });
+  document.getElementById('file-upload-input').addEventListener('change', function (e) {
+    var f = e.target.files && e.target.files[0];
+    if (f && PE.ProjectManager) { PE.ProjectManager.uploadJSON(f).catch(function (err) { status('Mở file thất bại: ' + err.message); }); }
+    e.target.value = '';
+  });
+
+  /* ----- Module tabs ----- */
+  function switchTab(tab) {
+    document.querySelectorAll('.module-tab').forEach(function (t) {
+      t.classList.toggle('active', t.getAttribute('data-tab') === tab);
+    });
+    var main = document.getElementById('main-layout');
+    var dock = document.getElementById('bottom-dock');
+    ['animation-panel', 'code-panel', 'ui-panel', 'ai-panel'].forEach(function (id) {
+      document.getElementById(id).classList.remove('active');
+    });
+    dock.classList.remove('dock-expanded');
+    if (tab === '3d') { main.style.display = ''; dock.style.display = ''; }
+    else if (tab === '2d') { main.style.display = ''; dock.style.display = ''; showDock('tile-palette'); status('Chế độ 2D & Tilemaps — chọn tile ở Tile Palette.'); }
+    else if (tab === 'animation') { main.style.display = ''; dock.style.display = ''; dock.classList.add('dock-expanded'); showDock('timeline-panel'); document.getElementById('animation-panel').classList.add('active'); status('Chế độ Animation — Timeline đã mở rộng.'); }
+    else if (tab === 'code') { main.style.display = 'none'; dock.style.display = 'none'; document.getElementById('code-panel').classList.add('active'); }
+    else if (tab === 'ui') { main.style.display = 'none'; dock.style.display = 'none'; document.getElementById('ui-panel').classList.add('active'); }
+    else if (tab === 'ai') { main.style.display = 'none'; dock.style.display = 'none'; document.getElementById('ai-panel').classList.add('active'); }
+  }
+  window.PixiEngine.switchTab = switchTab;
+  document.querySelectorAll('.module-tab').forEach(function (t) {
+    t.addEventListener('click', function () { switchTab(t.getAttribute('data-tab')); });
+  });
+
+  /* ----- Dock tabs ----- */
+  function showDock(id) {
+    document.querySelectorAll('.dock-tabs button').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-dock') === id);
+    });
+    document.querySelectorAll('#bottom-panels > section').forEach(function (s) {
+      s.classList.toggle('active', s.id === id);
+    });
+  }
+  document.querySelectorAll('.dock-tabs button').forEach(function (b) {
+    b.addEventListener('click', function () { showDock(b.getAttribute('data-dock')); });
+  });
+
+  /* ----- Play / Pause / Stop ----- */
+  function setPlayUI(playing) {
+    document.getElementById('btn-play').classList.toggle('playing', !!playing);
+    document.getElementById('touch-controls').classList.toggle('show', !!playing);
+  }
+  function callRuntime(fn) {
+    if (PE.GameRuntime && typeof PE.GameRuntime[fn] === 'function') { PE.GameRuntime[fn](); return true; }
+    return false;
+  }
+  document.getElementById('btn-play').addEventListener('click', function () {
+    if (!callRuntime('play')) { PE.state.mode = 'play'; status('▶ Đang chạy game (GameRuntime do nhóm Runtime nối sau).'); }
+    setPlayUI(true);
+  });
+  document.getElementById('btn-play-top').addEventListener('click', function () { document.getElementById('btn-play').click(); });
+  document.getElementById('btn-pause').addEventListener('click', function () {
+    if (!callRuntime('pause')) { status('⏸ Tạm dừng.'); }
+  });
+  document.getElementById('btn-stop').addEventListener('click', function () {
+    if (!callRuntime('stop')) { PE.state.mode = 'edit'; status('⏹ Đã dừng, về chế độ Edit.'); }
+    setPlayUI(false);
+  });
+  document.getElementById('btn-save-top').addEventListener('click', function () {
+    if (PE.ProjectManager) { PE.ProjectManager.saveToLocalStorage(); }
+  });
+
+  /* ----- Viewport toolbar ----- */
+  document.querySelectorAll('#viewport-toolbar [data-tool]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('#viewport-toolbar [data-tool]').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      if (PE.EventBus) { PE.EventBus.emit('tool-changed', { tool: btn.getAttribute('data-tool') }); }
+    });
+  });
+  document.getElementById('camera-mode').addEventListener('change', function (e) {
+    if (PE.CameraController) { PE.CameraController.setMode(e.target.value); }
+  });
+  document.getElementById('shading-mode').addEventListener('change', function (e) {
+    if (PE.Engine) { PE.Engine.setShading(e.target.value); }
+  });
+  var gridOn = true;
+  document.getElementById('btn-grid').addEventListener('click', function () {
+    gridOn = !gridOn;
+    this.classList.toggle('active', gridOn);
+    if (PE.Engine) { PE.Engine.toggleGrid(gridOn); }
+  });
+  document.getElementById('btn-focus').addEventListener('click', function () { if (PE.Engine) { PE.Engine.focusSelected(); } });
+  document.getElementById('btn-zoom-in').addEventListener('click', function () { if (PE.CameraController) { PE.CameraController.zoomIn(); } });
+  document.getElementById('btn-zoom-out').addEventListener('click', function () { if (PE.CameraController) { PE.CameraController.zoomOut(); } });
+
+  /* ----- Panel trượt trên mobile ----- */
+  function bindPanelToggle(btnId, panelId) {
+    var b = document.getElementById(btnId);
+    if (b) { b.addEventListener('click', function () { document.getElementById(panelId).classList.toggle('open'); }); }
+  }
+  bindPanelToggle('btn-toggle-hierarchy', 'hierarchy-panel');
+  bindPanelToggle('btn-toggle-inspector', 'inspector-panel');
+  bindPanelToggle('btn-close-hierarchy', 'hierarchy-panel');
+  bindPanelToggle('btn-close-inspector', 'inspector-panel');
+
+  /* ----- Phím tắt ----- */
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); if (PE.ProjectManager) { PE.ProjectManager.saveToLocalStorage(); } }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); if (PE.UndoRedoManager) { PE.UndoRedoManager.undo(); } }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') { e.preventDefault(); if (PE.UndoRedoManager) { PE.UndoRedoManager.redo(); } }
+    if (e.key === 'F' || e.key === 'f') { if (PE.Engine) { PE.Engine.focusSelected(); } }
+  });
+
+  /* ----- Joystick chạm (touch) — gửi hướng vào InputManager nếu có ----- */
+  var joy = document.getElementById('joystick'), knob = document.getElementById('joystick-knob');
+  if (joy && knob) {
+    var joyActive = false;
+    function joyMove(e) {
+      var t = e.touches ? e.touches[0] : e;
+      var r = joy.getBoundingClientRect();
+      var dx = t.clientX - (r.left + r.width / 2), dy = t.clientY - (r.top + r.height / 2);
+      var len = Math.sqrt(dx * dx + dy * dy), max = r.width / 2 - 10;
+      if (len > max) { dx = dx / len * max; dy = dy / len * max; }
+      knob.style.left = (34 + dx) + 'px'; knob.style.top = (34 + dy) + 'px';
+      if (PE.InputManager && PE.InputManager.setJoystick) { PE.InputManager.setJoystick(dx / max, dy / max); }
+    }
+    joy.addEventListener('touchstart', function (e) { joyActive = true; joyMove(e); e.preventDefault(); }, { passive: false });
+    joy.addEventListener('touchmove', function (e) { if (joyActive) { joyMove(e); e.preventDefault(); } }, { passive: false });
+    joy.addEventListener('touchend', function () { joyActive = false; knob.style.left = '34px'; knob.style.top = '34px'; if (PE.InputManager && PE.InputManager.setJoystick) { PE.InputManager.setJoystick(0, 0); } });
+  }
+});
+</script>
+</body>
+</html>

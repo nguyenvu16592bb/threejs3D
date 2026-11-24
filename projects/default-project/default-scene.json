@@ -1,0 +1,1305 @@
+{
+  "version": 1,
+  "name": "Untitled Project",
+  "objects": [
+    {
+      "id": "light-mwu8fznm-370",
+      "name": "Ánh sáng mặt trời",
+      "type": "light",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "sun",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "light-mwu8fznm-371",
+      "name": "Ánh sáng môi trường",
+      "type": "light",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "ambient",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "terrain-block-mwu8fznn-373",
+      "name": "Đất tầng 1",
+      "type": "terrain-block",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": -1.5,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "box",
+      "size": {
+        "width": 14,
+        "height": 3,
+        "depth": 14
+      },
+      "options": null,
+      "color": "#8D6E63",
+      "opacity": null
+    },
+    {
+      "id": "terrain-block-mwu8fznn-375",
+      "name": "Cỏ tầng 1",
+      "type": "terrain-block",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0.2,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "box",
+      "size": {
+        "width": 14.4,
+        "height": 0.4,
+        "depth": 14.4
+      },
+      "options": null,
+      "color": "#66BB6A",
+      "opacity": null
+    },
+    {
+      "id": "terrain-block-mwu8fzno-377",
+      "name": "Đất tầng 2",
+      "type": "terrain-block",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 8,
+          "y": -1.9,
+          "z": 5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "box",
+      "size": {
+        "width": 9,
+        "height": 2,
+        "depth": 9
+      },
+      "options": null,
+      "color": "#8D6E63",
+      "opacity": null
+    },
+    {
+      "id": "terrain-block-mwu8fzno-379",
+      "name": "Cỏ tầng 2",
+      "type": "terrain-block",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 8,
+          "y": -0.7,
+          "z": 5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "box",
+      "size": {
+        "width": 9.4,
+        "height": 0.4,
+        "depth": 9.4
+      },
+      "options": null,
+      "color": "#66BB6A",
+      "opacity": null
+    },
+    {
+      "id": "terrain-block-mwu8fznp-381",
+      "name": "Đất tầng 3",
+      "type": "terrain-block",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -8,
+          "y": -1.9,
+          "z": -5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "box",
+      "size": {
+        "width": 6,
+        "height": 1.5,
+        "depth": 6
+      },
+      "options": null,
+      "color": "#8D6E63",
+      "opacity": null
+    },
+    {
+      "id": "terrain-block-mwu8fznp-383",
+      "name": "Cỏ tầng 3",
+      "type": "terrain-block",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -8,
+          "y": -0.95,
+          "z": -5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "box",
+      "size": {
+        "width": 6.4,
+        "height": 0.4,
+        "depth": 6.4
+      },
+      "options": null,
+      "color": "#66BB6A",
+      "opacity": null
+    },
+    {
+      "id": "terrain-block-mwu8fznq-385",
+      "name": "Đáy đảo",
+      "type": "terrain-block",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": -5.5,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "cylinder",
+      "size": {
+        "height": 5,
+        "diameterTop": 11,
+        "diameterBottom": 1.5
+      },
+      "options": null,
+      "color": "#795548",
+      "opacity": null
+    },
+    {
+      "id": "water-mwu8fznq-387",
+      "name": "Mặt nước",
+      "type": "water",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": -1,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "ground",
+      "size": {
+        "width": 80,
+        "height": 80
+      },
+      "options": null,
+      "color": "#4FC3F7",
+      "opacity": 0.65
+    },
+    {
+      "id": "tree-mwu8fznr-392",
+      "name": "Cây thông 1",
+      "type": "tree",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -4.5,
+          "y": 0.4,
+          "z": -4
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "tree-mwu8fzns-397",
+      "name": "Cây thông 2",
+      "type": "tree",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 4.5,
+          "y": 0.4,
+          "z": -3.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1.1,
+          "y": 1.1,
+          "z": 1.1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "tree-mwu8fzns-402",
+      "name": "Cây thông 3",
+      "type": "tree",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -5,
+          "y": 0.4,
+          "z": 3.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0.9,
+          "y": 0.9,
+          "z": 0.9
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "tree-mwu8fznt-407",
+      "name": "Cây thông 4",
+      "type": "tree",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 5.5,
+          "y": 0.4,
+          "z": 4
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "tree-mwu8fznu-412",
+      "name": "Cây thông 5",
+      "type": "tree",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 8,
+          "y": -0.5,
+          "z": 5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0.9,
+          "y": 0.9,
+          "z": 0.9
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "rock-mwu8fznv-414",
+      "name": "Tảng đá 1",
+      "type": "rock",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -2,
+          "y": 0.4,
+          "z": 5.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "sphere",
+      "size": {
+        "diameterX": 1.54,
+        "diameterY": 0.8800000000000001,
+        "diameterZ": 1.32
+      },
+      "options": null,
+      "color": "#9E9E9E",
+      "opacity": null
+    },
+    {
+      "id": "rock-mwu8fznw-416",
+      "name": "Tảng đá 2",
+      "type": "rock",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 2.5,
+          "y": 0.4,
+          "z": -5.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "sphere",
+      "size": {
+        "diameterX": 1.26,
+        "diameterY": 0.7200000000000001,
+        "diameterZ": 1.08
+      },
+      "options": null,
+      "color": "#9E9E9E",
+      "opacity": null
+    },
+    {
+      "id": "rock-mwu8fznw-418",
+      "name": "Tảng đá 3",
+      "type": "rock",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 9.5,
+          "y": -0.5,
+          "z": 2.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "sphere",
+      "size": {
+        "diameterX": 1.1199999999999999,
+        "diameterY": 0.6400000000000001,
+        "diameterZ": 0.96
+      },
+      "options": null,
+      "color": "#9E9E9E",
+      "opacity": null
+    },
+    {
+      "id": "rock-mwu8fznx-420",
+      "name": "Tảng đá 4",
+      "type": "rock",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -9,
+          "y": -0.75,
+          "z": -3
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "sphere",
+      "size": {
+        "diameterX": 0.9799999999999999,
+        "diameterY": 0.5599999999999999,
+        "diameterZ": 0.84
+      },
+      "options": null,
+      "color": "#9E9E9E",
+      "opacity": null
+    },
+    {
+      "id": "chest-mwu8fzny-424",
+      "name": "Rương kho báu",
+      "type": "chest",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 3,
+          "y": 0.4,
+          "z": 3
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "coin-mwu8fznz-426",
+      "name": "Đồng xu 1",
+      "type": "coin",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 1.5,
+          "y": 1,
+          "z": 2
+        },
+        "rotation": {
+          "x": 1.5707963267948966,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "cylinder",
+      "size": {
+        "height": 0.08,
+        "diameter": 0.5
+      },
+      "options": null,
+      "color": "#FFD54F",
+      "opacity": null
+    },
+    {
+      "id": "coin-mwu8fzo0-428",
+      "name": "Đồng xu 2",
+      "type": "coin",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 2.2,
+          "y": 1,
+          "z": 2.6
+        },
+        "rotation": {
+          "x": 1.5707963267948966,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "cylinder",
+      "size": {
+        "height": 0.08,
+        "diameter": 0.5
+      },
+      "options": null,
+      "color": "#FFD54F",
+      "opacity": null
+    },
+    {
+      "id": "coin-mwu8fzo1-430",
+      "name": "Đồng xu 3",
+      "type": "coin",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 1.8,
+          "y": 1.6,
+          "z": 3.2
+        },
+        "rotation": {
+          "x": 1.5707963267948966,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "cylinder",
+      "size": {
+        "height": 0.08,
+        "diameter": 0.5
+      },
+      "options": null,
+      "color": "#FFD54F",
+      "opacity": null
+    },
+    {
+      "id": "coin-mwu8fzo2-432",
+      "name": "Đồng xu 4",
+      "type": "coin",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 4,
+          "y": 1,
+          "z": 1.5
+        },
+        "rotation": {
+          "x": 1.5707963267948966,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "cylinder",
+      "size": {
+        "height": 0.08,
+        "diameter": 0.5
+      },
+      "options": null,
+      "color": "#FFD54F",
+      "opacity": null
+    },
+    {
+      "id": "coin-mwu8fzo3-434",
+      "name": "Đồng xu 5",
+      "type": "coin",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -3,
+          "y": 1,
+          "z": -2
+        },
+        "rotation": {
+          "x": 1.5707963267948966,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "cylinder",
+      "size": {
+        "height": 0.08,
+        "diameter": 0.5
+      },
+      "options": null,
+      "color": "#FFD54F",
+      "opacity": null
+    },
+    {
+      "id": "coin-mwu8fzo4-436",
+      "name": "Đồng xu 6",
+      "type": "coin",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 8.5,
+          "y": 0.2,
+          "z": 6
+        },
+        "rotation": {
+          "x": 1.5707963267948966,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "cylinder",
+      "size": {
+        "height": 0.08,
+        "diameter": 0.5
+      },
+      "options": null,
+      "color": "#FFD54F",
+      "opacity": null
+    },
+    {
+      "id": "bridge-mwu8fzo6-446",
+      "name": "Cầu gỗ",
+      "type": "bridge",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0.6,
+          "z": 6.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0.7853981633974483,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "waterfall-mwu8fzo7-448",
+      "name": "Thác nước",
+      "type": "waterfall",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 7.2,
+          "y": 0.4,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "house-mwu8fzpa-452",
+      "name": "Nhà nhỏ 1",
+      "type": "house",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -3.5,
+          "y": 0.4,
+          "z": -1.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0.4,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "house-mwu8fzpb-456",
+      "name": "Nhà nhỏ 2",
+      "type": "house",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 8,
+          "y": -0.5,
+          "z": 7
+        },
+        "rotation": {
+          "x": 0,
+          "y": -0.6,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "temple-mwu8fzpd-461",
+      "name": "Cổng Torii",
+      "type": "temple",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0.4,
+          "z": -6
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": null,
+      "size": null,
+      "options": null,
+      "color": null,
+      "opacity": null
+    },
+    {
+      "id": "flower-mwu8fzpe-463",
+      "name": "Hoa 1",
+      "type": "flower",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -1.5,
+          "y": 0.6,
+          "z": 4.5
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "sphere",
+      "size": {
+        "diameter": 0.3
+      },
+      "options": null,
+      "color": "#F06292",
+      "opacity": null
+    },
+    {
+      "id": "flower-mwu8fzpf-465",
+      "name": "Hoa 2",
+      "type": "flower",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 3.5,
+          "y": 0.6,
+          "z": -1
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "sphere",
+      "size": {
+        "diameter": 0.3
+      },
+      "options": null,
+      "color": "#FFEB3B",
+      "opacity": null
+    },
+    {
+      "id": "flower-mwu8fzph-467",
+      "name": "Hoa 3",
+      "type": "flower",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -6,
+          "y": 0.6,
+          "z": 1
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "sphere",
+      "size": {
+        "diameter": 0.3
+      },
+      "options": null,
+      "color": "#BA68C8",
+      "opacity": null
+    },
+    {
+      "id": "lantern-mwu8fzpi-469",
+      "name": "Đèn lồng 1",
+      "type": "lantern",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": -1.2,
+          "y": 1.8,
+          "z": -6
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "sphere",
+      "size": {
+        "diameter": 0.5
+      },
+      "options": null,
+      "color": "#E53935",
+      "opacity": null
+    },
+    {
+      "id": "lantern-mwu8fzpj-471",
+      "name": "Đèn lồng 2",
+      "type": "lantern",
+      "parentId": null,
+      "transform": {
+        "position": {
+          "x": 1.2,
+          "y": 1.8,
+          "z": -6
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": [],
+      "visible": true,
+      "active": true,
+      "tag": "",
+      "layer": "Default",
+      "static": false,
+      "meshType": "sphere",
+      "size": {
+        "diameter": 0.5
+      },
+      "options": null,
+      "color": "#E53935",
+      "opacity": null
+    }
+  ]
+}
