@@ -18,6 +18,19 @@
     if (window.PixiEngine.ProjectManager) { window.PixiEngine.ProjectManager.markDirty(); }
     emit('scene-changed', { objects: state.objects.length });
   }
+  /* v5.0.0: mirror sang ThreeRenderer khi đang ở chế độ three — nếu không,
+     object thêm/xóa/sửa lúc ở chế độ three sẽ không hiện bên three cho tới
+     khi switchTo() rebuild. Phòng thủ try/catch, không phá luồng Babylon. */
+  function syncThree(action, obj) {
+    try {
+      if (!window.PixiEngine || window.PixiEngine.state.renderer !== 'three') { return; }
+      var TR = window.PixiEngine.ThreeRenderer;
+      if (!TR) { return; }
+      if (action === 'add' && TR.addObject) { TR.addObject(obj); }
+      else if (action === 'remove' && TR.removeObject) { TR.removeObject(obj && obj.id); }
+      else if (action === 'update' && TR.updateObject) { TR.updateObject(obj); }
+    } catch (e) { console.warn('[SceneManager] sync three failed:', e); }
+  }
 
   function defaultTransform() {
     return {
@@ -179,6 +192,7 @@
       if (action) { window.PixiEngine.UndoRedoManager.push(action); }
     }
     emit('hierarchy-changed', { action: 'add', id: obj.id });
+    syncThree('add', obj);
     markDirty();
     return obj;
   }
@@ -222,6 +236,7 @@
       if (action) { window.PixiEngine.UndoRedoManager.push(action); }
     }
     emit('hierarchy-changed', { action: 'remove', id: id });
+    syncThree('remove', obj);
     markDirty();
     return true;
   }
@@ -259,6 +274,7 @@
       if (action) { window.PixiEngine.UndoRedoManager.push(action); }
     }
     emit('transform-changed', { id: id });
+    syncThree('update', obj);
     markDirty();
     return true;
   }
@@ -268,6 +284,7 @@
     if (!obj) { return false; }
     obj.visible = !!visible;
     if (obj.babylonNode) { obj.babylonNode.setEnabled(obj.visible); }
+    syncThree('update', obj);
     emit('hierarchy-changed', { action: 'visibility', id: id });
     markDirty();
     return true;

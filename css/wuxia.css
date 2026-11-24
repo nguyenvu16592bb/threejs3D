@@ -1,0 +1,124 @@
+/* wuxia.css — HUD game Wuxia MMORPG, dark theme, phone-first (v5.0.0).
+   Dùng chung cho index.html (#wuxia-panel) và wuxia.html standalone.
+   Nút chạm >= 44px. Không phụ thuộc Babylon/PixiJS. */
+
+#wuxia-app {
+  position: fixed; inset: 0;
+  background: #0b0e1a;
+  color: #e8e6d9;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+}
+#wuxia-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+#wuxia-hud { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+#wuxia-hud button, #wuxia-hud .wuxia-clickable { pointer-events: auto; }
+
+/* ----- Màn hình bắt đầu (wuxia.html) ----- */
+#wuxia-start {
+  position: absolute; inset: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(160deg, rgba(11,14,26,0.92), rgba(46,16,16,0.92));
+  padding: 16px;
+}
+.wuxia-start-box { text-align: center; max-width: 420px; }
+.wuxia-start-box h1 { margin: 0 0 8px; font-size: 32px; color: #ffd54a; letter-spacing: 1px; }
+.wuxia-subtitle { color: #b0bec5; margin: 0 0 12px; font-size: 14px; }
+.wuxia-guide { font-size: 14px; line-height: 1.6; color: #e8e6d9; }
+#btn-wuxia-start {
+  min-width: 200px; min-height: 52px; margin: 12px 0;
+  font-size: 18px; font-weight: 700; color: #1a1200;
+  background: linear-gradient(180deg, #ffd54a, #f0a500);
+  border: none; border-radius: 12px; cursor: pointer;
+}
+#btn-wuxia-start:active { transform: scale(0.97); }
+#wuxia-editor-link { color: #80cbc4; font-size: 14px; }
+.wuxia-status { color: #ef9a9a; font-size: 13px; min-height: 18px; }
+.wuxia-error {
+  position: absolute; left: 16px; right: 16px; bottom: 16px; z-index: 30;
+  background: #4a1414; border: 1px solid #e57373; border-radius: 10px; padding: 12px;
+  color: #ffcdd2; font-size: 14px; text-align: center;
+}
+.wuxia-error button { min-height: 44px; padding: 0 18px; border-radius: 8px; border: none; cursor: pointer; }
+
+/* ----- HUD chung: thanh HP/MP, boss bar, minimap ----- */
+.wuxia-bars { position: absolute; top: 10px; left: 10px; right: 110px; }
+.wuxia-bar { height: 18px; border-radius: 9px; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.25); overflow: hidden; margin-bottom: 5px; }
+.wuxia-bar > .wuxia-fill { height: 100%; transition: width 0.2s ease; }
+.wuxia-bar-hp > .wuxia-fill { background: linear-gradient(90deg, #c62828, #ef5350); }
+.wuxia-bar-mp > .wuxia-fill { background: linear-gradient(90deg, #1565c0, #42a5f5); }
+.wuxia-bar-label { position: absolute; left: 8px; font-size: 11px; line-height: 18px; color: #fff; text-shadow: 0 1px 2px #000; }
+.wuxia-name { font-size: 14px; font-weight: 700; color: #ffd54a; text-shadow: 0 1px 2px #000; margin-bottom: 4px; }
+
+.wuxia-boss-bar { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: min(520px, 70vw); text-align: center; }
+.wuxia-boss-bar .wuxia-bar { height: 14px; border-color: #b71c1c; }
+.wuxia-boss-bar .wuxia-fill { background: linear-gradient(90deg, #7b1fa2, #e53935); }
+.wuxia-boss-name { font-size: 13px; font-weight: 700; color: #ff8a80; text-shadow: 0 1px 2px #000; }
+
+.wuxia-minimap {
+  position: absolute; top: 10px; right: 10px;
+  width: 96px; height: 96px; border-radius: 8px;
+  background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* ----- Skill bar + nút chạm ----- */
+.wuxia-skill-bar {
+  position: absolute; right: 10px; bottom: 12px;
+  display: flex; gap: 8px; align-items: flex-end;
+}
+.wuxia-skill-btn {
+  width: 52px; height: 52px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.4);
+  background: rgba(20,24,48,0.8); color: #ffd54a;
+  font-size: 20px; cursor: pointer; touch-action: manipulation;
+}
+.wuxia-skill-btn:active { background: rgba(255,213,74,0.5); }
+.wuxia-skill-btn.wuxia-skill-main { width: 64px; height: 64px; font-size: 24px; border-color: #ffd54a; }
+
+/* ----- Joystick (WuxiaHUD tạo; fallback style nếu HUD dùng class này) ----- */
+.wuxia-joystick {
+  position: absolute; left: 16px; bottom: 16px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.25);
+  pointer-events: auto; touch-action: none;
+}
+.wuxia-joystick-knob {
+  position: absolute; left: 35px; top: 35px; width: 50px; height: 50px; border-radius: 50%;
+  background: rgba(255,213,74,0.75); border: 2px solid rgba(255,255,255,0.6);
+}
+
+/* ----- Damage numbers ----- */
+.wuxia-damage {
+  position: absolute; font-weight: 800; font-size: 20px; color: #ffeb3b;
+  text-shadow: 0 2px 3px #000; pointer-events: none;
+  animation: wuxia-damage-float 0.9s ease-out forwards;
+}
+.wuxia-damage.wuxia-crit { color: #ff5722; font-size: 26px; }
+.wuxia-damage.wuxia-heal { color: #69f0ae; }
+@keyframes wuxia-damage-float {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-56px) scale(1.15); }
+}
+
+/* ----- Panel Wuxia trong index.html (không full màn hình) ----- */
+#wuxia-panel .panel-body { position: relative; }
+#wuxia-panel #wuxia-hud { position: relative; inset: auto; min-height: 120px; }
+#wuxia-panel .btn {
+  display: inline-block; min-height: 44px; padding: 10px 16px;
+  border-radius: 8px; border: 1px solid #555; background: #263238; color: #fff;
+  text-decoration: none; cursor: pointer; font-size: 14px; margin-right: 8px;
+}
+#wuxia-panel .btn.primary { background: #f0a500; border-color: #f0a500; color: #1a1200; font-weight: 700; }
+
+/* ----- Responsive điện thoại ----- */
+@media (max-width: 768px) {
+  .wuxia-start-box h1 { font-size: 26px; }
+  .wuxia-bars { right: 92px; }
+  .wuxia-minimap { width: 76px; height: 76px; }
+  .wuxia-boss-bar { width: 62vw; top: 96px; }
+  .wuxia-skill-bar { bottom: 10px; right: 8px; gap: 6px; }
+  .wuxia-skill-btn { width: 48px; height: 48px; font-size: 18px; }
+  .wuxia-skill-btn.wuxia-skill-main { width: 60px; height: 60px; }
+  .wuxia-joystick { width: 110px; height: 110px; left: 12px; bottom: 12px; }
+  .wuxia-joystick-knob { left: 30px; top: 30px; }
+  .wuxia-bar { height: 16px; }
+}

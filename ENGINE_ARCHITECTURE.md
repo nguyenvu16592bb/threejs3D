@@ -1,26 +1,29 @@
-# ENGINE_ARCHITECTURE.md — PixiJS 3D Game Engine Editor
+# ENGINE_ARCHITECTURE.md — PixiJS 3D Game Engine Editor — v5.0.0
 
 ## 1. Tổng quan
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ index.html — shell: menu, 6 tab, layout, status bar, CDN       │
+│ index.html — shell: menu, 7 tab (thêm ⚔️ Wuxia Game), layout,   │
+│   status bar, CDN (Pixi + Babylon + Three r128), wuxia.html    │
+│   standalone (chỉ Three.js)                                     │
 ├─────────────────────────────────────────────────────────────────┤
 │ js/core/Boot.js — nối tất cả module (gọi init từng module)     │
 ├───────────┬───────────────┬───────────────┬─────────────────────┤
 │ CORE      │ RENDERING     │ EDITOR        │ TERRAIN / MODELS /  │
 │ Engine    │ BabylonRender │ Hierarchy     │ ANIMATION / EFFECTS │
-│ SceneMgr  │ PixiRenderer  │ Inspector     │ UI / AI / RUNTIME   │
-│ EventBus  │ CameraCtrl    │ Gizmo         │ (xem §4)            │
-│ Select    │ Lighting      │ AssetBrowser  │                     │
-│ Undo/Redo │ Material      │ Toolbar       │                     │
-│ Project   │ Shadow        │ ContextMenu   │                     │
+│ (v5.0.0)  │ ThreeRenderer │ Inspector     │ UI / AI / RUNTIME   │
+│ SceneMgr  │ RendererSwitch│ Gizmo         │ WUXIA (Three.js)    │
+│ EventBus  │ PixiRenderer  │ AssetBrowser  │ (xem §4b)           │
+│ Select    │ CameraCtrl    │ Toolbar       │                     │
+│ Undo/Redo │ Lighting      │ ContextMenu   │                     │
+│ Project   │ Shadow        │               │                     │
 └───────────┴───────────────┴───────────────┴─────────────────────┘
         │                │                 │
         ▼                ▼                 ▼
-  window.PixiEngine.state ──► BABYLON.Scene (3D thật)
-  { scene, engine, canvas,      ▲
-    objects[], selected,        │ PixiJS overlay (HUD/widget)
+  window.PixiEngine.state ──► BABYLON.Scene (3D thật) / THREE.Scene
+  { scene, engine, canvas,      ▲              (Wuxia, qua
+    objects[], selected,        │ PixiJS overlay (HUD/widget)  RendererSwitch)
     mode, stats }               │
 ```
 
@@ -34,6 +37,26 @@
 - **Hai layer render rõ ràng**: Babylon.js làm 3D thật (mesh, light, animation,
   particle, terrain). PixiJS v8 chỉ làm overlay 2D (HUD, widget UI) trên canvas
   `#pixi-overlay` phủ trên viewport. Không giả vờ PixiJS làm 3D.
+- **v5.0.0 — renderer thứ hai (Three.js r128)**: `js/rendering/ThreeRenderer.js` +
+  `ThreeGLBLoader.js` + `RendererSwitch.js` (nhóm Rendering) cho phép chuyển
+  viewport giữa Babylon và Three.js qua select `#renderer-select` ở toolbar.
+  Wiring trong `index.html` gọi `window.PixiEngine.RendererSwitch.switchTo(value)`
+  có phòng thủ `typeof` — nếu module chưa có thì báo status rõ và giữ Babylon.
+- **v5.0.0 — Wuxia Game tách riêng**: `js/wuxia/*.js` (nhóm Wuxia) chạy trên
+  Three.js, không chạm logic Babylon/PixiJS của editor. Điểm nối duy nhất:
+  tab `#wuxia-panel` + `#wuxia-viewport`/`#wuxia-hud` trong `index.html`, nút Play
+  gọi `PE.WuxiaGame.init(container)` + `start()` có phòng thủ `typeof THREE`.
+  **Đã xác minh từ code thật của nhóm Wuxia:** `WuxiaGame.init(canvasOrContainer,
+  opts)` nhận element hoặc selector; Game tự tạo canvas renderer WebGL và append
+  vào container, tự tìm `#wuxia-hud` trong container để gắn HUD; nếu truyền
+  element CANVAS thì lấy parentNode làm container. Vì vậy wiring truyền
+  `#wuxia-viewport` (index.html, hiện khi tab wuxia mở) và `#wuxia-app`
+  (wuxia.html, full màn hình) — **không** truyền `#viewport-canvas` (nằm trong
+  `#main-layout` đang bị ẩn ở tab wuxia) hay object `{canvas, hud}`. Tên global
+  đã xác minh: `PE.WuxiaGame` (wiring thử thêm `window.WuxiaGame` /
+  `PE.Wuxia.Game` để phòng hờ); `start()`/`stop()` đều có thật. `wuxia.html`
+  standalone chỉ load three.js r128 (không Babylon/PixiJS) và khởi tạo game sau
+  gesture chạm (AudioContext).
 - **Phòng thủ giữa các nhóm**: mọi lệnh gọi chéo manager đều kiểm tra `typeof`
   trước; module chưa sẵn thì nút bị disable + title "Planned", không giả vờ chạy.
 
@@ -86,6 +109,10 @@ phòng thủ resolve id string nếu gặp.
 ### Rendering (`js/rendering/`)
 - `BabylonRenderer.js` — tạo engine/scene/camera/lights, `createGround`,
   `createSkybox` (dùng `clearColor`, không URL ngoài).
+- `ThreeRenderer.js` / `ThreeGLBLoader.js` / `RendererSwitch.js` — **v5.0.0,
+  nhóm Rendering**: renderer Three.js r128 song song Babylon, load GLB qua
+  GLTFLoader + MeshoptDecoder, `RendererSwitch.switchTo('babylon'|'three')`.
+  (File do nhóm Rendering cung cấp; `index.html` đã load script tag trước Boot.js.)
 - `PixiRenderer.js` — `PIXI.Application` overlay, crosshair, `drawTextOverlay`.
   Degrade gracefully khi PIXI chưa load.
 - `CameraController.js` — orbit/free/top/front/left/right, focus, zoom, WASD
@@ -160,6 +187,22 @@ phòng thủ resolve id string nếu gặp.
   (`ArcRotateCamera.target`), loop `registerBeforeRender` dt cố định 1/60,
   cập nhật StateMachine Walk/Idle.
 
+### Wuxia MMORPG (`js/wuxia/`) — v5.0.0, nhóm Wuxia
+- `WuxiaWorld.js` / `WuxiaCamera.js` — thế giới Trường Bạch (map 56×56, đền, nhà,
+  cổng, portal) + camera theo nhân vật. `WuxiaCharacters.js` — 3 hero GLB
+  (RobotExpressive / Fox / CesiumMan) + NPC. `WuxiaParty.js` — party 3 người.
+  `WuxiaCombat.js` / `WuxiaSkills.js` — combat + skill. `WuxiaEnemies.js` —
+  quái theo bãi spawn + boss Long Ngâm Lão Tổ (1200 HP). `WuxiaQuests.js` — quest (ids trong
+  `projects/default-project/wuxia-scene.json`). `WuxiaHUD.js` — HUD HP/MP,
+  boss bar, minimap, joystick + skill bar (style `css/wuxia.css`).
+  `WuxiaDungeon.js` / `WuxiaInventory.js` / `WuxiaAudio.js` — dungeon, túi đồ,
+  âm thanh (AudioContext resume sau gesture chạm). `WuxiaGame.js` — entry
+  `PE.WuxiaGame`, `init(containerElementHoặcSelector, opts)` + `start()`/`stop()`
+  (đã xác minh từ code thật; Game tự tạo renderer canvas, map hardcode 56×56,
+  chưa đọc file `wuxia-scene.json` — file JSON chỉ là mô tả tham khảo).
+- Thứ tự load: World/Camera trước, Game cuối, tất cả trước `Boot.js`.
+  `wuxia.html` load cùng 13 file này + CDN three r128, không load Babylon/PixiJS.
+
 ## 5. Luồng dữ liệu
 
 ```
@@ -177,15 +220,26 @@ Load → deserializeScene → dựng lại node (meshType hoặc builder composi
 
 ## 6. Thứ tự load script (index.html)
 
-CDN: pixi → babylon → loaders → gui → serializers.
+CDN: pixi → **three r128 (three.min.js → GLTFLoader.js → meshopt_decoder.js)**
+→ babylon → loaders → gui → serializers.
 Sau đó: core (EventManager → Engine → SceneManager → Selection → UndoRedo →
-ProjectManager) → rendering → editor → terrain → models → animation → effects →
-ui (UIEditor → WidgetManager → CodeEditor) → ai → runtime → **`Boot.js` cuối cùng**.
+ProjectManager) → rendering (PixiRenderer → BabylonRenderer →
+**ThreeRenderer → ThreeGLBLoader → RendererSwitch**) → editor → terrain →
+models → animation → effects → ui (UIEditor → WidgetManager → CodeEditor) → ai
+→ runtime → **wuxia (WuxiaWorld → WuxiaCamera → … → WuxiaGame cuối)** →
+**`Boot.js` cuối cùng**.
 Inline `DOMContentLoaded` gọi `Engine.init()`; Boot tự boot khi DOM sẵn sàng.
+`wuxia.html`: CDN three r128 → 13 file `js/wuxia/*` (cùng thứ tự) → inline
+start-on-tap; không có Babylon/PixiJS/Boot.
 
 ## 7. Giới hạn đã biết
 
 - Vật lý đơn giản, không engine vật lý đầy đủ; không NavMesh.
 - Texture terrain = vertex color, chưa phải splat shader.
-- Không import FBX (Babylon không có loader).
-- Chưa test trên trình duyệt/điện thoại thật.
+- Không import FBX (Babylon không có loader; Three.js r128 trong dự án cũng
+  chỉ nạp GLTFLoader + MeshoptDecoder, không có FBXLoader).
+- GLB Wuxia chỉ load khi có mạng CDN (three r128 + model GLB); mất mạng thì
+  dùng fallback procedural (nếu nhóm Wuxia đã làm) hoặc không có nhân vật thật.
+- `wuxia-scene.json` chỉ là mô tả tham khảo — `WuxiaGame` hiện hardcode map
+  56×56 và chưa có hàm load file JSON này.
+- v5.0.0 **chưa test** trên trình duyệt/điện thoại thật.

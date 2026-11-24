@@ -3,6 +3,9 @@
    Nhóm CORE. */
 (function () {
   window.PixiEngine = window.PixiEngine || {};
+  /* v5.0.0 — version hiển thị (chỉ đổi version, không đổi logic renderer). */
+  var VERSION = '5.0.0';
+  window.PixiEngine.version = VERSION;
   var state = window.PixiEngine.state;
   var engine = null;
   var scene = null;
@@ -178,6 +181,6 @@
   window.PixiEngine.Engine = {
     init: init, getScene: getScene, getEngine: getEngine, getCamera: getCamera,
     focusSelected: focusSelected, setShading: setShading, toggleGrid: toggleGrid,
-    dispose: dispose, updateStats: updateStats
+    dispose: dispose, updateStats: updateStats, version: VERSION
   };
 })();

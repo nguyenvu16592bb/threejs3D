@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Wuxia Game — MMORPG 3D (Three.js) — v5.0.0</title>
+<link rel="stylesheet" href="css/wuxia.css">
+</head>
+<body>
+<div id="wuxia-app">
+  <canvas id="wuxia-canvas"></canvas>
+  <div id="wuxia-hud"></div>
+
+  <!-- Màn hình bắt đầu: chạm để khởi tạo AudioContext + game (autoplay policy) -->
+  <div id="wuxia-start">
+    <div class="wuxia-start-box">
+      <h1>⚔️ Wuxia Game</h1>
+      <p class="wuxia-subtitle">MMORPG 3D — Trường Bạch • v5.0.0 • Three.js r128</p>
+      <p class="wuxia-guide">Joystick trái: di chuyển • Nút phải: đánh / skill / nhảy<br>
+      Cần mạng để tải three.js r128 + model GLB từ CDN.</p>
+      <button id="btn-wuxia-start" type="button">▶ Bắt đầu chơi</button>
+      <p><a id="wuxia-editor-link" href="index.html">Mở trong Editor ↗</a></p>
+      <p id="wuxia-start-status" class="wuxia-status">Chưa bắt đầu.</p>
+    </div>
+  </div>
+
+  <div id="wuxia-error" class="wuxia-error" hidden>
+    <p>⚠️ Không tải được three.js r128 từ CDN. Kiểm tra kết nối mạng rồi tải lại trang.</p>
+    <button type="button" onclick="location.reload()">Tải lại trang</button>
+  </div>
+</div>
+
+<!-- ===== CDN three.js r128 UMD (đã xác minh 200) — CHỈ three.js, không Babylon/PixiJS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/meshopt_decoder.js"></script>
+
+<!-- ===== Wuxia MMORPG (nhóm Wuxia) — World/Camera trước, Game cuối ===== -->
+<script src="js/wuxia/WuxiaWorld.js"></script>
+<script src="js/wuxia/WuxiaCamera.js"></script>
+<script src="js/wuxia/WuxiaCharacters.js"></script>
+<script src="js/wuxia/WuxiaParty.js"></script>
+<script src="js/wuxia/WuxiaCombat.js"></script>
+<script src="js/wuxia/WuxiaSkills.js"></script>
+<script src="js/wuxia/WuxiaEnemies.js"></script>
+<script src="js/wuxia/WuxiaQuests.js"></script>
+<script src="js/wuxia/WuxiaHUD.js"></script>
+<script src="js/wuxia/WuxiaDungeon.js"></script>
+<script src="js/wuxia/WuxiaInventory.js"></script>
+<script src="js/wuxia/WuxiaAudio.js"></script>
+<script src="js/wuxia/WuxiaGame.js"></script>
+
+<script>
+'use strict';
+/* wuxia.html — standalone phone-first. Chỉ khởi tạo game khi người chơi chạm
+   "Bắt đầu chơi" (AudioContext cần gesture; autoplay policy chặn âm thanh tự chạy). */
+(function () {
+  var started = false;
+  function status(msg) {
+    var el = document.getElementById('wuxia-start-status');
+    if (el) { el.textContent = msg; }
+  }
+  /* Nhóm Wuxia expose chưa thống nhất (PE.Wuxia.Game / PE.WuxiaGame /
+     window.WuxiaGame) — thử lần lượt mọi tên, vì WuxiaGame.js chưa giao xong. */
+  function getWuxiaGame() {
+    if (window.WuxiaGame) { return window.WuxiaGame; }
+    var PE = window.PixiEngine || {};
+    if (PE.WuxiaGame) { return PE.WuxiaGame; }
+    if (PE.Wuxia && PE.Wuxia.Game) { return PE.Wuxia.Game; }
+    return null;
+  }
+  function getWuxiaAudio() {
+    if (window.WuxiaAudio) { return window.WuxiaAudio; }
+    var PE = window.PixiEngine || {};
+    if (PE.WuxiaAudio) { return PE.WuxiaAudio; }
+    if (PE.Wuxia && PE.Wuxia.Audio) { return PE.Wuxia.Audio; }
+    return null;
+  }
+  function startGame() {
+    if (started) { return; }
+    if (typeof THREE === 'undefined') {
+      document.getElementById('wuxia-error').hidden = false;
+      status('⚠️ Chưa tải được three.js r128 từ CDN — kiểm tra mạng rồi tải lại trang.');
+      return;
+    }
+    var WG = getWuxiaGame();
+    if (!WG || typeof WG.init !== 'function') {
+      status('⚠️ WuxiaGame chưa load (js/wuxia/WuxiaGame.js do nhóm Wuxia cung cấp).');
+      return;
+    }
+    try {
+      /* AudioContext phải resume trong gesture chạm (nhóm WuxiaAudio nếu có). */
+      var WA = getWuxiaAudio();
+      if (WA && typeof WA.resume === 'function') { WA.resume(); }
+      /* WuxiaGame.init(container, opts): container là element/selector; Game tự
+         tạo canvas renderer + tự tìm #wuxia-hud trong container. Truyền
+         #wuxia-app (full màn hình); canvas #wuxia-canvas chỉ là placeholder. */
+      WG.init(document.getElementById('wuxia-app'));
+      if (typeof WG.start === 'function') { WG.start(); }
+      started = true;
+      document.getElementById('wuxia-start').style.display = 'none';
+    } catch (err) {
+      status('⚠️ Không chạy được game: ' + (err && err.message ? err.message : err));
+    }
+  }
+  document.getElementById('btn-wuxia-start').addEventListener('click', startGame);
+  /* Báo sớm nếu CDN three.js lỗi ngay khi load trang (trước khi bấm bắt đầu). */
+  window.addEventListener('load', function () {
+    if (typeof THREE === 'undefined') { document.getElementById('wuxia-error').hidden = false; }
+  });
+})();
+</script>
+</body>
+</html>

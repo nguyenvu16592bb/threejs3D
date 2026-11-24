@@ -1,0 +1,184 @@
+{
+  "name": "Wuxia — Trường Bạch (v5.0.0)",
+  "version": 5,
+  "description": "Scene Wuxia MMORPG tham khảo — KHỚP với def thật trong js/wuxia/ (WuxiaCharacters/WuxiaEnemies/WuxiaQuests). WuxiaGame hiện hardcode các def này, chưa đọc file JSON (xem README). Map 56x56, tọa độ tile.",
+  "map": {
+    "name": "truong-bach",
+    "width": 56,
+    "height": 56,
+    "tileSize": 1,
+    "terrain": "phố tuyết + đền trên núi + hồ băng + rừng thông"
+  },
+  "spawn": {
+    "player": {
+      "x": 28,
+      "y": 40
+    },
+    "town": {
+      "x": 28,
+      "y": 40,
+      "label": "Thị trấn Trường Bạch"
+    }
+  },
+  "heroes": [
+    {
+      "id": "hero-lam-phong",
+      "name": "Lâm Phong",
+      "title": "Lâm Phong Kiếm",
+      "class": "kiem-khach",
+      "level": 1,
+      "model": "RobotExpressive.glb",
+      "x": 28,
+      "y": 40
+    },
+    {
+      "id": "hero-thiet-nguu",
+      "name": "Thiết Ngưu",
+      "title": "Thiết Ngưu Thương",
+      "class": "thuong-khach",
+      "level": 1,
+      "model": "CesiumMan.glb",
+      "x": 26,
+      "y": 40
+    },
+    {
+      "id": "hero-bach-tuyet",
+      "name": "Bạch Tuyết",
+      "title": "Bạch Tuyết Pháp",
+      "class": "phap-su",
+      "level": 1,
+      "model": "CesiumMan.glb",
+      "x": 30,
+      "y": 40
+    }
+  ],
+  "npcs": [
+    {
+      "id": "npc-ve-binh",
+      "name": "Vệ Binh A Hổ",
+      "role": "guard",
+      "x": 25.5,
+      "y": 42.5
+    },
+    {
+      "id": "npc-truong-lao",
+      "name": "Trưởng Lão Tuyết",
+      "role": "quest-giver",
+      "questIds": [
+        "q1",
+        "q2",
+        "q3"
+      ],
+      "x": 24,
+      "y": 20
+    }
+  ],
+  "enemySpawns": [
+    {
+      "id": "spawn-tuyet-yeu",
+      "enemy": "snow",
+      "name": "Tuyết Yêu",
+      "count": 9,
+      "area": {
+        "x": 4,
+        "y": 4,
+        "w": 12,
+        "h": 12
+      },
+      "respawnSec": 20
+    },
+    {
+      "id": "spawn-son-tac",
+      "enemy": "bandit",
+      "name": "Sơn Tặc",
+      "count": 7,
+      "area": {
+        "x": 42,
+        "y": 10,
+        "w": 10,
+        "h": 10
+      },
+      "respawnSec": 25
+    },
+    {
+      "id": "spawn-ho-ly",
+      "enemy": "fox",
+      "name": "Hồ Ly Tinh (elite)",
+      "count": 3,
+      "area": {
+        "x": 44,
+        "y": 26,
+        "w": 8,
+        "h": 8
+      },
+      "respawnSec": 30
+    }
+  ],
+  "boss": {
+    "id": "boss-long-ngam",
+    "name": "Long Ngâm Lão Tổ",
+    "level": 10,
+    "hp": 1200,
+    "x": 48,
+    "y": 40,
+    "questId": "q3"
+  },
+  "quests": [
+    {
+      "id": "q1",
+      "name": "Dẹp loạn Tuyết Yêu",
+      "giver": "npc-truong-lao",
+      "target": "snow",
+      "count": 5,
+      "reward": {
+        "gold": 100,
+        "exp": 50
+      }
+    },
+    {
+      "id": "q2",
+      "name": "Cứu thương nhân",
+      "giver": "npc-truong-lao",
+      "target": "bandit",
+      "count": 3,
+      "extraTarget": "fox",
+      "extraCount": 1,
+      "reward": {
+        "gold": 150,
+        "exp": 120,
+        "atkBonus": 10
+      }
+    },
+    {
+      "id": "q3",
+      "name": "Long Ngâm Giáng Thế",
+      "giver": "npc-truong-lao",
+      "target": "boss-long-ngam",
+      "count": 1,
+      "reward": {
+        "gold": 500,
+        "exp": 600
+      }
+    }
+  ],
+  "objects": [
+    {
+      "name": "Cổng Trường Bạch",
+      "type": "gate",
+      "x": 28,
+      "y": 44.8
+    },
+    {
+      "name": "Đền Trường Bạch",
+      "type": "temple",
+      "x": 28,
+      "y": 5.5
+    },
+    {
+      "name": "Cổng dịch chuyển (dungeon)",
+      "type": "portal",
+      "x": 50,
+      "y": 30
+    }
+  ]
+}

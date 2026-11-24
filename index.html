@@ -3,14 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PixiJS 3D Game Engine Editor</title>
+<title>PixiJS 3D Game Engine Editor — v5.0.0</title>
 <link rel="stylesheet" href="css/themes.css">
 <link rel="stylesheet" href="css/editor.css">
 <link rel="stylesheet" href="css/panels.css">
 <link rel="stylesheet" href="css/viewport.css">
+<link rel="stylesheet" href="css/wuxia.css">
 <style>
   /* Panel module thay thế layout chính khi chọn tab (trừ tab 3D / 2D). */
   #bottom-dock.dock-expanded { flex-basis: 340px; height: 340px; }
+  /* v5.0.0: badge version ở top bar + control renderer/Wuxia ở toolbar. */
+  #app-version { font-size: 12px; opacity: 0.75; margin-left: 6px; white-space: nowrap; }
+  #renderer-select { min-height: 30px; }
+  #btn-play-wuxia { min-height: 30px; white-space: nowrap; }
+  /* v5.0.0: vùng chứa game Wuxia trong tab (WuxiaGame tự tạo canvas renderer). */
+  #wuxia-viewport { position: relative; min-height: 420px; background: #0b0e1a; border-radius: 8px; overflow: hidden; }
+  #wuxia-viewport canvas { display: block; max-width: 100%; }
 </style>
 </head>
 <body>
@@ -19,7 +27,7 @@
   <!-- ===== Top bar ===== -->
   <header id="top-bar">
     <button class="top-btn" id="btn-toggle-hierarchy" title="Hiện/ẩn Hierarchy">☰</button>
-    <div id="app-title">PixiJS <span>3D</span> Game Engine Editor</div>
+    <div id="app-title">PixiJS <span>3D</span> Game Engine Editor <span id="app-version">v5.0.0</span></div>
     <div id="project-name">Untitled Project</div>
     <div class="spacer"></div>
     <button class="top-btn" id="btn-save-top" title="Lưu project (Ctrl+S)">💾 <span class="label">Lưu</span></button>
@@ -121,6 +129,7 @@
     <button class="module-tab" data-tab="code" role="tab">💻 Code Editor</button>
     <button class="module-tab" data-tab="ui" role="tab">🖼️ UI System</button>
     <button class="module-tab" data-tab="ai" role="tab">🤖 AI Assistant</button>
+    <button class="module-tab" data-tab="wuxia" role="tab">⚔️ Wuxia Game</button>
   </div>
 
   <!-- ===== Layout chính: Hierarchy | Viewport | Inspector ===== -->
@@ -162,6 +171,11 @@
             <button id="btn-focus" title="Focus object đã chọn (F)">◎ Focus</button>
             <button id="btn-zoom-in" title="Phóng to">＋</button>
             <button id="btn-zoom-out" title="Thu nhỏ">－</button>
+            <select id="renderer-select" title="Renderer 3D">
+              <option value="babylon">Babylon.js</option>
+              <option value="three">Three.js</option>
+            </select>
+            <button id="btn-play-wuxia" title="Chạy game Wuxia (Three.js)">▶ Play Wuxia</button>
           </div>
         </div>
 
@@ -263,6 +277,20 @@
     <div class="panel-header">AI Assistant</div>
     <div class="panel-body"><p class="panel-empty">Panel AI Assistant — nhóm AI điền nội dung (AIAssistant, PromptManager) tại đây.</p></div>
   </section>
+  <section id="wuxia-panel" class="module-panel" aria-label="Wuxia Game">
+    <div class="panel-header">⚔️ Wuxia Game — MMORPG 3D (Three.js)</div>
+    <div class="panel-body">
+      <div id="wuxia-viewport"><div id="wuxia-hud"></div></div>
+      <p>
+        <button class="btn primary" id="btn-wuxia-play" type="button">▶ Play Wuxia</button>
+        <button class="btn" id="btn-wuxia-stop" type="button">⏹ Stop</button>
+        <a class="btn" href="wuxia.html" target="_blank" rel="noopener">📱 Mở bản standalone (điện thoại)</a>
+      </p>
+      <p class="panel-empty">Hướng dẫn chạm: joystick trái để di chuyển, nút skill phải để đánh/chạy/nhảy.
+      Cần mạng để tải three.js r128 + model GLB từ CDN (xem README v5.0.0). Nếu game chưa
+      load, kiểm tra status bar — WuxiaGame do nhóm Wuxia cung cấp qua js/wuxia/*.js.</p>
+    </div>
+  </section>
 
   <!-- ===== Status bar ===== -->
   <footer id="status-bar">
@@ -282,6 +310,10 @@
 
 <!-- ===== CDN (đã xác minh 200) ===== -->
 <script src="https://cdn.jsdelivr.net/npm/pixi.js@8.23.0/dist/pixi.min.js"></script>
+<!-- Three.js r128 UMD (v5.0.0) — PHẢI load trước Babylon để Wuxia/ThreeRenderer dùng -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/meshopt_decoder.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/babylonjs@7.0.0/babylon.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/babylonjs-loaders@7.0.0/babylonjs.loaders.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/babylonjs-gui@7.0.0/babylon.gui.min.js"></script>
@@ -298,6 +330,9 @@
 <!-- ===== Rendering ===== -->
 <script src="js/rendering/PixiRenderer.js"></script>
 <script src="js/rendering/BabylonRenderer.js"></script>
+<script src="js/rendering/ThreeRenderer.js"></script>
+<script src="js/rendering/ThreeGLBLoader.js"></script>
+<script src="js/rendering/RendererSwitch.js"></script>
 <script src="js/rendering/CameraController.js"></script>
 <script src="js/rendering/LightingManager.js"></script>
 <script src="js/rendering/MaterialManager.js"></script>
@@ -350,6 +385,21 @@
 <script src="js/runtime/InputManager.js"></script>
 <script src="js/runtime/PhysicsManager.js"></script>
 <script src="js/runtime/CollisionManager.js"></script>
+
+<!-- ===== Wuxia MMORPG (v5.0.0, nhóm Wuxia) — World/Camera trước, Game cuối ===== -->
+<script src="js/wuxia/WuxiaWorld.js"></script>
+<script src="js/wuxia/WuxiaCamera.js"></script>
+<script src="js/wuxia/WuxiaCharacters.js"></script>
+<script src="js/wuxia/WuxiaParty.js"></script>
+<script src="js/wuxia/WuxiaCombat.js"></script>
+<script src="js/wuxia/WuxiaSkills.js"></script>
+<script src="js/wuxia/WuxiaEnemies.js"></script>
+<script src="js/wuxia/WuxiaQuests.js"></script>
+<script src="js/wuxia/WuxiaHUD.js"></script>
+<script src="js/wuxia/WuxiaDungeon.js"></script>
+<script src="js/wuxia/WuxiaInventory.js"></script>
+<script src="js/wuxia/WuxiaAudio.js"></script>
+<script src="js/wuxia/WuxiaGame.js"></script>
 
 <!-- ===== Boot: nối tất cả module (phải load CUỐI CÙNG) ===== -->
 <script src="js/core/Boot.js"></script>
@@ -435,7 +485,7 @@ window.addEventListener('DOMContentLoaded', function () {
       case 'show-console': showDock('console-panel'); break;
       case 'show-timeline': showDock('timeline-panel'); break;
       case 'show-assets': showDock('asset-browser'); break;
-      case 'about': alert('PixiJS 3D Game Engine Editor\nBabylon.js 7 + PixiJS 8\nScene mặc định: đảo nổi.'); break;
+      case 'about': alert('PixiJS 3D Game Engine Editor v5.0.0\nBabylon.js 7 + PixiJS 8 + Three.js r128\nScene mặc định: đảo nổi. Tab ⚔️ Wuxia Game: MMORPG 3D (Three.js).'); break;
       case 'shortcuts': alert('Phím tắt:\nCtrl+S lưu • Ctrl+Z hoàn tác • Ctrl+Y làm lại\nCtrl+D nhân đôi • Del xóa • F focus\nWASD di chuyển camera ở chế độ Free'); break;
       default: status('Chức năng "' + action + '" do nhóm khác phụ trách.');
     }
@@ -456,7 +506,7 @@ window.addEventListener('DOMContentLoaded', function () {
     });
     var main = document.getElementById('main-layout');
     var dock = document.getElementById('bottom-dock');
-    ['animation-panel', 'code-panel', 'ui-panel', 'ai-panel'].forEach(function (id) {
+    ['animation-panel', 'code-panel', 'ui-panel', 'ai-panel', 'wuxia-panel'].forEach(function (id) {
       document.getElementById(id).classList.remove('active');
     });
     dock.classList.remove('dock-expanded');
@@ -466,6 +516,7 @@ window.addEventListener('DOMContentLoaded', function () {
     else if (tab === 'code') { main.style.display = 'none'; dock.style.display = 'none'; document.getElementById('code-panel').classList.add('active'); }
     else if (tab === 'ui') { main.style.display = 'none'; dock.style.display = 'none'; document.getElementById('ui-panel').classList.add('active'); }
     else if (tab === 'ai') { main.style.display = 'none'; dock.style.display = 'none'; document.getElementById('ai-panel').classList.add('active'); }
+    else if (tab === 'wuxia') { main.style.display = 'none'; dock.style.display = 'none'; document.getElementById('wuxia-panel').classList.add('active'); status('⚔️ Wuxia Game — bấm ▶ Play Wuxia để chơi (Three.js).'); }
   }
   window.PixiEngine.switchTab = switchTab;
   document.querySelectorAll('.module-tab').forEach(function (t) {
@@ -533,6 +584,55 @@ window.addEventListener('DOMContentLoaded', function () {
   document.getElementById('btn-focus').addEventListener('click', function () { if (PE.Engine) { PE.Engine.focusSelected(); } });
   document.getElementById('btn-zoom-in').addEventListener('click', function () { if (PE.CameraController) { PE.CameraController.zoomIn(); } });
   document.getElementById('btn-zoom-out').addEventListener('click', function () { if (PE.CameraController) { PE.CameraController.zoomOut(); } });
+
+  /* ----- Renderer Switch (v5.0.0, nhóm Rendering) + Play Wuxia (nhóm Wuxia) ----- */
+  /* Nhóm Wuxia expose chưa thống nhất (PE.Wuxia.Game / PE.WuxiaGame /
+     window.WuxiaGame) — thử lần lượt mọi tên, vì WuxiaGame.js chưa giao xong. */
+  function getWuxiaGame() {
+    if (window.WuxiaGame) { return window.WuxiaGame; }
+    if (PE.WuxiaGame) { return PE.WuxiaGame; }
+    if (PE.Wuxia && PE.Wuxia.Game) { return PE.Wuxia.Game; }
+    return null;
+  }
+  function playWuxia() {
+    if (typeof THREE === 'undefined') { status('⚠️ Chưa tải được three.js r128 từ CDN — kiểm tra mạng rồi tải lại trang.'); return; }
+    var WG = getWuxiaGame();
+    if (!WG || typeof WG.init !== 'function') { status('⚠️ WuxiaGame chưa load (js/wuxia/WuxiaGame.js do nhóm Wuxia cung cấp).'); return; }
+    try {
+      switchTab('wuxia');
+      /* WuxiaGame.init(container, opts): container là element/selector; Game tự
+         tạo canvas renderer + tự tìm #wuxia-hud trong container. Container phải
+         là #wuxia-viewport (hiện khi tab wuxia mở), KHÔNG phải #viewport-canvas
+         (nằm trong #main-layout đang bị ẩn ở tab này). */
+      WG.init(document.getElementById('wuxia-viewport'));
+      if (typeof WG.start === 'function') { WG.start(); }
+      status('⚔️ Đang chạy Wuxia Game (Three.js).');
+    } catch (err) { status('⚠️ Không chạy được Wuxia Game: ' + (err && err.message ? err.message : err)); }
+  }
+  function stopWuxia() {
+    var WG = getWuxiaGame();
+    if (WG && typeof WG.stop === 'function') { WG.stop(); status('⏹ Đã dừng Wuxia Game.'); }
+    else { status('WuxiaGame chưa load — không có gì để dừng.'); }
+  }
+  var rendererSelect = document.getElementById('renderer-select');
+  if (rendererSelect) {
+    rendererSelect.addEventListener('change', function (e) {
+      var value = e.target.value;
+      if (PE.RendererSwitch && typeof PE.RendererSwitch.switchTo === 'function') {
+        PE.RendererSwitch.switchTo(value);
+        status('Renderer: ' + (value === 'three' ? 'Three.js r128' : 'Babylon.js 7') + '.');
+      } else {
+        status('⚠️ RendererSwitch chưa load (js/rendering/RendererSwitch.js do nhóm Rendering cung cấp) — vẫn dùng Babylon.js.');
+        e.target.value = 'babylon';
+      }
+    });
+  }
+  var btnPlayWuxia = document.getElementById('btn-play-wuxia');
+  if (btnPlayWuxia) { btnPlayWuxia.addEventListener('click', playWuxia); }
+  var btnWuxiaPlay = document.getElementById('btn-wuxia-play');
+  if (btnWuxiaPlay) { btnWuxiaPlay.addEventListener('click', playWuxia); }
+  var btnWuxiaStop = document.getElementById('btn-wuxia-stop');
+  if (btnWuxiaStop) { btnWuxiaStop.addEventListener('click', stopWuxia); }
 
   /* ----- Panel trượt trên mobile ----- */
   function bindPanelToggle(btnId, panelId) {
